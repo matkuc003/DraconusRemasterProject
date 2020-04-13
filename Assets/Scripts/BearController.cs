@@ -25,18 +25,22 @@ public class BearController : MonoBehaviour {
 
 	private Animator anim;
 
+    public Animator fire;
+    private float timeFire;
+    private bool activeFire = false;
 	// Use this for initialization
 	void Awake ()
 	{
 //		startTime = Time.time;
 		anim = GetComponent<Animator> ();
+        fire.gameObject.SetActive(false);
 	}
 
 	void FixedUpdate ()
 	{
 		grounded = Physics2D.OverlapCircle (groundCheck.position, groundRadius, whatIsGround);
 		anim.SetBool ("ground", grounded);
-	}
+    }
 
 	void Update()
 	{
@@ -59,7 +63,7 @@ public class BearController : MonoBehaviour {
 
         if (Input.GetKeyDown("c") && (grounded)) { anim.SetTrigger("Punch"); }
 
-        if (Input.GetKeyDown("left shift"))
+        if (Input.GetKey("left shift"))
         {
             anim.SetBool("Sprint", true);
             HSpeed = 14f;
@@ -69,6 +73,14 @@ public class BearController : MonoBehaviour {
             anim.SetBool("Sprint", false);
             HSpeed = 10f;
         }
+
+        if(Input.GetKeyDown("x"))
+        {
+            fire.gameObject.SetActive(true);
+            timeFire = Time.time;
+            activeFire = true;
+        }
+        disableFire();
 
         //Flipping direction character is facing based on players Input
         if (moveXInput > 0 && !facingRight)
@@ -85,4 +97,12 @@ public class BearController : MonoBehaviour {
 		transform.localScale = theScale;
 	}
 
+    void disableFire()
+    {
+        if((activeFire) && Time.time - timeFire >= 0.5)
+        {
+            fire.gameObject.SetActive(false);
+            activeFire = false;
+        }
+    }
 }
