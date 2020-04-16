@@ -20,6 +20,7 @@ public class BearController : MonoBehaviour {
 	public Transform groundCheck;
 	public LayerMask whatIsGround;
 	private bool grounded = false;
+    private bool crouch = false;
 	private float groundRadius = 0.15f;
 	private float jumpForce = 12f;
 
@@ -52,6 +53,17 @@ public class BearController : MonoBehaviour {
             anim.SetBool("ground", false);
 
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.y, jumpForce);
+        } 
+        
+        if((grounded) && Input.GetKey("down"))
+        {
+            Debug.Log("crouch");
+            anim.SetBool("crouch", true);
+            crouch = true;
+        } else
+        {
+            anim.SetBool("crouch", false);
+            crouch = false;
         }
 
 
