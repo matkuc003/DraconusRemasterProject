@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 143660}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.058754325, y: -1.251537, z: 0}
+  m_LocalPosition: {x: -0.058754325, y: -1.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 424682}
@@ -167,13 +167,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 189690}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb78906cda8821a4787582c89438b35a, type: 3}
+  m_Script: {fileID: 11500000, guid: ab194d7c177647f4d85179b56ad9f657, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundCheck: {fileID: 417436}
+  groundCheck: {fileID: 0}
   whatIsGround:
     serializedVersion: 2
-    m_Bits: 4294964735
+    m_Bits: 0
+  fire: {fileID: 0}
 --- !u!58 &5896622
 CircleCollider2D:
   m_ObjectHideFlags: 0
