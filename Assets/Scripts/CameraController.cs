@@ -21,8 +21,8 @@ public class CameraController : MonoBehaviour
         vertBound = horBound * cam.aspect;
         rightBound = vertBound/2;
         leftBound = -vertBound/2;
-        topBound = horBound;
-        bottomBound = -horBound;
+        topBound = horBound/2;
+        bottomBound = -horBound/2;
         player = GameObject.FindWithTag("Player").transform;
         cameraPos = transform.position;
     }
