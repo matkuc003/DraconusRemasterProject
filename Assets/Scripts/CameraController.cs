@@ -16,15 +16,17 @@ public class CameraController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        cameraPos = transform.position;
         Camera cam = Camera.main;
         horBound = 2f * cam.orthographicSize;
         vertBound = horBound * cam.aspect;
         rightBound = vertBound/2;
         leftBound = -vertBound/2;
-        topBound = horBound/2;
-        bottomBound = -horBound/2;
+        topBound = horBound/2 + cameraPos.y;
+        Debug.Log(topBound);
+        bottomBound = -horBound/2 + cameraPos.y;
+        Debug.Log(bottomBound);
         player = GameObject.FindWithTag("Player").transform;
-        cameraPos = transform.position;
     }
 
     // Update is called once per frame
