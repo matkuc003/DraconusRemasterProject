@@ -62,7 +62,7 @@ public class BearController : MonoBehaviour {
             crouch = true;
         } else
         {
-            anim.SetBool("crouch", false);
+           // anim.SetBool("crouch", false);
             crouch = false;
         }
 
@@ -115,6 +115,14 @@ public class BearController : MonoBehaviour {
         {
             fire.gameObject.SetActive(false);
             activeFire = false;
+        }
+    }
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            this.gameObject.transform.position = new Vector3((float)-0.222, (float)-0.222, 0);
+            
         }
     }
 }
