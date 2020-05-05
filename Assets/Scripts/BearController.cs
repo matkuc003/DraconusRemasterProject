@@ -12,6 +12,7 @@ public class BearController : MonoBehaviour {
 	//private float maxVertHSpeed = 20f;
 	private bool facingRight = true;
 	private float moveXInput;
+    private Vector3 tmpPosition;
 
     //Used for flipping Character Direction
 	public static Vector3 theScale;
@@ -25,6 +26,7 @@ public class BearController : MonoBehaviour {
 	private float jumpForce = 12f;
 
 	private Animator anim;
+    public GameObject diver;
 
     public Animator fire;
     private float timeFire;
@@ -123,6 +125,17 @@ public class BearController : MonoBehaviour {
         {
             this.gameObject.transform.position = new Vector3((float)-0.222, (float)-0.222, 0);
             
+        }
+    }
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "water")
+        {
+           tmpPosition= this.gameObject.transform.position;
+            tmpPosition.y -= 2;
+            this.gameObject.SetActive(false);
+            diver.transform.position = tmpPosition;
+            diver.SetActive(true);
         }
     }
 }

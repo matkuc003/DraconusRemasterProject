@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Fire
   - Enemy
+  - water
+  - Diver
   layers:
   - Default
   - TransparentFX

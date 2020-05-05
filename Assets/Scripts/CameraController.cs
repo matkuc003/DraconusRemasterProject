@@ -5,6 +5,8 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     private Transform player;
+    public Transform diver;
+    private Transform tmpPlayer;
     private Vector3 cameraPos;
     private float vertBound;
     private float horBound;
@@ -27,6 +29,7 @@ public class CameraController : MonoBehaviour
         bottomBound = -horBound/2 + cameraPos.y;
         Debug.Log(bottomBound);
         player = GameObject.FindWithTag("Player").transform;
+        tmpPlayer = GameObject.FindWithTag("Player").transform;
     }
 
     // Update is called once per frame
@@ -59,6 +62,19 @@ public class CameraController : MonoBehaviour
             topBound -= horBound;
             bottomBound -= horBound;
             transform.position = cameraPos;
+        }
+ 
+    }
+    private void FixedUpdate()
+    {
+        if (tmpPlayer.gameObject.activeSelf==false)
+        {
+         
+            player = diver;
+        }
+        else if (diver.gameObject.activeSelf==false)
+        {
+            player = tmpPlayer;
         }
     }
 }
