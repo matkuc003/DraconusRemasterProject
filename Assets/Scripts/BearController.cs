@@ -27,7 +27,7 @@ public class BearController : MonoBehaviour {
 
 	private Animator anim;
     public GameObject diver;
-
+    private Boolean platformCheck;
     public Animator fire;
     private float timeFire;
     private bool activeFire = false;
@@ -101,6 +101,20 @@ public class BearController : MonoBehaviour {
             Flip();
         else if (moveXInput < 0 && facingRight)
             Flip();
+
+        if(platformCheck==true && Input.GetKeyDown("v"))
+        {
+            //TODO
+            //check if player has artifact
+            anim.SetBool("vPressed", true);
+            tmpPosition = this.gameObject.transform.position;
+            tmpPosition.y -= 3;
+            this.gameObject.SetActive(false);
+            diver.transform.position = tmpPosition;
+            diver.SetActive(true);
+            platformCheck = false;
+        }
+        anim.SetBool("vPressed", false);
     }
     ////Flipping direction of character
     void Flip()
@@ -126,16 +140,25 @@ public class BearController : MonoBehaviour {
             this.gameObject.transform.position = new Vector3((float)-0.222, (float)-0.222, 0);
             
         }
+        if (collision.gameObject.tag == "PlatformForDiving")
+        {
+            Debug.Log("platform");
+            platformCheck = true;
+
+        }
+        if (collision.gameObject.tag == "Base")
+        {
+            Debug.Log("base");
+
+            platformCheck = false;
+
+        }
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "water")
         {
-           tmpPosition= this.gameObject.transform.position;
-            tmpPosition.y -= 2;
-            this.gameObject.SetActive(false);
-            diver.transform.position = tmpPosition;
-            diver.SetActive(true);
+            this.gameObject.transform.position = new Vector3((float)-0.222, (float)-0.222, 0);
         }
     }
 }

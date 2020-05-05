@@ -7,8 +7,9 @@ public class PlayerController : MonoBehaviour{
 	public float moveSpeed;
 	public bool rushing = false;
 	private float speedMod = 0;
-	private Vector3 tmpPosition;
+	private Vector3 tmpPosition,tmpPosition2;
 	float timeLeft = 2f;
+	private bool platformCheck2;
 
 	private Rigidbody2D myRigidBody;
 
@@ -31,8 +32,16 @@ public class PlayerController : MonoBehaviour{
 
 		myAnim.SetFloat ("Speed", Mathf.Abs(myRigidBody.velocity.x));
 
-	 
-		
+		if (platformCheck2 == true && Input.GetKeyDown("v"))
+		{
+			myAnim.SetBool("vPressed", true);
+			tmpPosition = this.gameObject.transform.position;
+			tmpPosition.y += 3;
+			this.gameObject.SetActive(false);
+			player.transform.position = tmpPosition;
+			player.SetActive(true);
+			platformCheck2 = false;
+		}
 	}
 
 	void controllerManager (){
@@ -57,6 +66,7 @@ public class PlayerController : MonoBehaviour{
 	}
 
 	void movePlayer(){
+		platformCheck2 = false;
 		if (transform.localScale.x == 3f) {
 			myRigidBody.velocity = new Vector3 (moveSpeed + speedMod, myRigidBody.velocity.y, 0f);	
 		} else {
@@ -84,11 +94,25 @@ public class PlayerController : MonoBehaviour{
 	{
 		if (collision.gameObject.tag == "water")
 		{
-			tmpPosition = this.gameObject.transform.position;
-			tmpPosition.y += 2;
+			tmpPosition2=this.gameObject.transform.position;
+			tmpPosition2.y -= 1;
+			this.gameObject.transform.position = tmpPosition2;
+		}
+	}
+	void OnCollisionEnter2D(Collision2D collision)
+	{
+		if (collision.gameObject.tag == "Enemy")
+		{
 			this.gameObject.SetActive(false);
 			player.transform.position = tmpPosition;
 			player.SetActive(true);
+			player.transform.position = new Vector3((float)-0.222, (float)-0.222, 0);
+
+		}
+		if (collision.gameObject.tag == "PlatformForDiving")
+		{
+			platformCheck2 = true;
+
 		}
 	}
 

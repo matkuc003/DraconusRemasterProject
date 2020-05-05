@@ -8,6 +8,8 @@ TagManager:
   - Enemy
   - water
   - Diver
+  - PlatformForDiving
+  - Base
   layers:
   - Default
   - TransparentFX
