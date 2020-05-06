@@ -32,13 +32,19 @@ public class BearController : MonoBehaviour {
 
     private Vector2 savePoint = new Vector2(0, 0);
     private ScoreScript scoreScript;
-	// Use this for initialization
-	void Awake ()
+    private GridScript gridScript;
+
+    private bool mysticalMorphHelix = false;
+    private bool demonShieldOfGrom = false;
+    private bool staffOfFindol = false;
+    // Use this for initialization
+    void Awake ()
 	{
 //		startTime = Time.time;
 		anim = GetComponent<Animator> ();
         fire.gameObject.SetActive(false);
         this.scoreScript = new ScoreScript();
+        this.gridScript = GameObject.Find("Grid").GetComponent<GridScript>();
     }
 
 	void FixedUpdate ()
@@ -90,7 +96,7 @@ public class BearController : MonoBehaviour {
             HSpeed = 10f;
         }
 
-        if(Input.GetKeyDown("x"))
+        if(Input.GetKeyDown("x") && (grounded || staffOfFindol))
         {
             fire.gameObject.SetActive(true);
             timeFire = Time.time;
@@ -104,7 +110,7 @@ public class BearController : MonoBehaviour {
         else if (moveXInput < 0 && facingRight)
             Flip();
 
-        if(platformCheck==true && Input.GetKeyDown("v"))
+        if(platformCheck==true && Input.GetKeyDown("v") && mysticalMorphHelix)
         {
             //TODO
             //check if player has artifact
@@ -167,6 +173,25 @@ public class BearController : MonoBehaviour {
             Destroy(collision.gameObject);
             scoreScript.addPoints(100);
             Debug.Log(scoreScript.getScore());
+        }
+        if(collision.gameObject.tag == "Artefact")
+        {
+            Destroy(collision.gameObject);
+            switch(collision.gameObject.name)
+            {
+                case "Mystical Morph Helix":
+                    this.mysticalMorphHelix = true;
+                break;
+                case "Serekos Eye":
+                    this.gridScript.setVisibleHiddenWall(true);
+                break;
+                case "Demon Shield of Grom":
+                    this.demonShieldOfGrom = true;    
+                break;
+                case "Staff of Findol":
+                    this.staffOfFindol = true;    
+                break;
+            }
         }
     }
 }

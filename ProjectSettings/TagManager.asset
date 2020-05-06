@@ -12,6 +12,7 @@ TagManager:
   - Base
   - SavePoint
   - ExtraPoint
+  - Artefact
   layers:
   - Default
   - TransparentFX
