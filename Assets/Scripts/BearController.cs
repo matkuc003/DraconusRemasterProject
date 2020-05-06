@@ -31,13 +31,15 @@ public class BearController : MonoBehaviour {
     private bool activeFire = false;
 
     private Vector2 savePoint = new Vector2(0, 0);
+    private ScoreScript scoreScript;
 	// Use this for initialization
 	void Awake ()
 	{
 //		startTime = Time.time;
 		anim = GetComponent<Animator> ();
         fire.gameObject.SetActive(false);
-	}
+        this.scoreScript = new ScoreScript();
+    }
 
 	void FixedUpdate ()
 	{
@@ -158,7 +160,13 @@ public class BearController : MonoBehaviour {
     {
         if (collision.gameObject.tag == "water")
         {
-            this.gameObject.transform.position = new Vector3((float)-0.222, (float)-0.222, 0);
+            this.gameObject.transform.position = savePoint;
+        }
+        if(collision.gameObject.tag == "ExtraPoint")
+        {
+            Destroy(collision.gameObject);
+            scoreScript.addPoints(100);
+            Debug.Log(scoreScript.getScore());
         }
     }
 }
