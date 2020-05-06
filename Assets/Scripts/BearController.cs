@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System;
 
 //This Script is intended for demoing and testing animations only.
-
-
 public class BearController : MonoBehaviour {
 
 	private float HSpeed = 10f;
@@ -31,6 +29,8 @@ public class BearController : MonoBehaviour {
     public Animator fire;
     private float timeFire;
     private bool activeFire = false;
+
+    private Vector2 savePoint = new Vector2(0, 0);
 	// Use this for initialization
 	void Awake ()
 	{
@@ -137,21 +137,21 @@ public class BearController : MonoBehaviour {
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            this.gameObject.transform.position = new Vector3((float)-0.222, (float)-0.222, 0);
+            this.gameObject.transform.position = savePoint;
             
         }
         if (collision.gameObject.tag == "PlatformForDiving")
         {
-            Debug.Log("platform");
             platformCheck = true;
-
         }
         if (collision.gameObject.tag == "Base")
         {
-            Debug.Log("base");
-
             platformCheck = false;
-
+        }
+        if(collision.gameObject.tag == "SavePoint")
+        {
+            Debug.Log("save point: " + this.gameObject.transform.position.x + ", " + this.gameObject.transform.position.y);
+            savePoint = this.gameObject.transform.position;
         }
     }
     void OnTriggerEnter2D(Collider2D collision)

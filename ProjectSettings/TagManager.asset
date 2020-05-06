@@ -10,6 +10,7 @@ TagManager:
   - Diver
   - PlatformForDiving
   - Base
+  - SavePoint
   layers:
   - Default
   - TransparentFX
