@@ -27,6 +27,13 @@ public class GridScript : MonoBehaviour
                     currentCell.y = j;
                     tilemap.SetTile(currentCell, null);
                 }
+
+                for (int j = -42; j >= -45; j--)
+                {
+                    currentCell.x = i;
+                    currentCell.y = j;
+                    tilemap.SetTile(currentCell, null);
+                }
             }
         }
     }

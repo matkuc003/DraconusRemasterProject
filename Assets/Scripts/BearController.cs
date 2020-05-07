@@ -34,6 +34,10 @@ public class BearController : MonoBehaviour {
     private ScoreScript scoreScript;
     private GridScript gridScript;
 
+    private float currentFallTime;
+    private float maxFallTime = 1;
+    private bool playerIsFall = false;
+
     private bool mysticalMorphHelix = false;
     private bool demonShieldOfGrom = false;
     private bool staffOfFindol = false;
@@ -55,7 +59,6 @@ public class BearController : MonoBehaviour {
 
 	void Update()
 	{
-
         moveXInput = Input.GetAxis("Horizontal");
 
         if ((grounded) && Input.GetKeyDown("up"))
@@ -76,10 +79,8 @@ public class BearController : MonoBehaviour {
             crouch = false;
         }
 
-
         anim.SetFloat("HSpeed", Mathf.Abs(moveXInput));
         anim.SetFloat("vSpeed", GetComponent<Rigidbody2D>().velocity.y);
-
 
         GetComponent<Rigidbody2D>().velocity = new Vector2((moveXInput * HSpeed), GetComponent<Rigidbody2D>().velocity.y);
 
@@ -104,6 +105,20 @@ public class BearController : MonoBehaviour {
         }
         disableFire();
 
+        if (!(grounded) && !(demonShieldOfGrom)) playerIsFall = true;
+        else playerIsFall = false;
+
+        if (playerIsFall) 
+            currentFallTime += Time.deltaTime;
+
+        if ((grounded) && currentFallTime < maxFallTime)
+            currentFallTime = 0;
+
+        if (currentFallTime >= maxFallTime && (grounded))
+        {
+            currentFallTime = 0;
+            PlayerDead();
+        }
         //Flipping direction character is facing based on players Input
         if (moveXInput > 0 && !facingRight)
             Flip();
@@ -112,8 +127,6 @@ public class BearController : MonoBehaviour {
 
         if(platformCheck==true && Input.GetKeyDown("v") && mysticalMorphHelix)
         {
-            //TODO
-            //check if player has artifact
             anim.SetBool("vPressed", true);
             tmpPosition = this.gameObject.transform.position;
             tmpPosition.y -= 3;
@@ -145,8 +158,7 @@ public class BearController : MonoBehaviour {
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            this.gameObject.transform.position = savePoint;
-            
+            PlayerDead();
         }
         if (collision.gameObject.tag == "PlatformForDiving")
         {
@@ -166,7 +178,7 @@ public class BearController : MonoBehaviour {
     {
         if (collision.gameObject.tag == "water")
         {
-            this.gameObject.transform.position = savePoint;
+            PlayerDead();
         }
         if(collision.gameObject.tag == "ExtraPoint")
         {
@@ -193,5 +205,10 @@ public class BearController : MonoBehaviour {
                 break;
             }
         }
+    }
+
+    void PlayerDead()
+    {
+        this.gameObject.transform.position = savePoint;
     }
 }
