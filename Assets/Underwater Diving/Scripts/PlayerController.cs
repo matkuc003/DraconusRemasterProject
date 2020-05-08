@@ -16,11 +16,13 @@ public class PlayerController : MonoBehaviour{
 	private Animator myAnim;
 	public GameObject bubbles;
 	public GameObject player;
+    private SavePointSystem savePointSystem;
 	// Use this for initialization
 	void Start (){
 		myRigidBody = GetComponent<Rigidbody2D> ();	
 		myAnim = GetComponent<Animator> ();
-	}
+        this.savePointSystem = GameObject.Find("SavePointSystem").GetComponent<SavePointSystem>();
+    }
 	
 	// Update is called once per frame
 	void Update (){
@@ -106,7 +108,7 @@ public class PlayerController : MonoBehaviour{
 			this.gameObject.SetActive(false);
 			player.transform.position = tmpPosition;
 			player.SetActive(true);
-			player.transform.position = new Vector3((float)-0.222, (float)-0.222, 0);
+            player.transform.position = savePointSystem.getSavePoint();
 
 		}
 		if (collision.gameObject.tag == "PlatformForDiving")

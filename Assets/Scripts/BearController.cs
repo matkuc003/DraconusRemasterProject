@@ -30,12 +30,12 @@ public class BearController : MonoBehaviour {
     private float timeFire;
     private bool activeFire = false;
 
-    private Vector2 savePoint = new Vector2(0, 0);
+    private SavePointSystem savePointSystem;
     private ScoreScript scoreScript;
     private GridScript gridScript;
 
     private float currentFallTime;
-    private float maxFallTime = 1;
+    private float maxFallTime = 1.2f;
     private bool playerIsFall = false;
 
     private bool mysticalMorphHelix = false;
@@ -49,6 +49,7 @@ public class BearController : MonoBehaviour {
         fire.gameObject.SetActive(false);
         this.scoreScript = new ScoreScript();
         this.gridScript = GameObject.Find("Grid").GetComponent<GridScript>();
+        this.savePointSystem = GameObject.Find("SavePointSystem").GetComponent<SavePointSystem>();
     }
 
 	void FixedUpdate ()
@@ -171,7 +172,7 @@ public class BearController : MonoBehaviour {
         if(collision.gameObject.tag == "SavePoint")
         {
             Debug.Log("save point: " + this.gameObject.transform.position.x + ", " + this.gameObject.transform.position.y);
-            savePoint = this.gameObject.transform.position;
+            savePointSystem.setSavePoint(this.gameObject.transform.position);
         }
     }
     void OnTriggerEnter2D(Collider2D collision)
@@ -209,6 +210,6 @@ public class BearController : MonoBehaviour {
 
     public void PlayerDead()
     {
-        this.gameObject.transform.position = savePoint;
+        this.gameObject.transform.position = savePointSystem.getSavePoint();
     }
 }
