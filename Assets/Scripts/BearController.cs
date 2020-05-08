@@ -207,7 +207,7 @@ public class BearController : MonoBehaviour {
         }
     }
 
-    void PlayerDead()
+    public void PlayerDead()
     {
         this.gameObject.transform.position = savePoint;
     }
