@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour{
 	public GameObject bubbles;
 	public GameObject player;
     private SavePointSystem savePointSystem;
+    public HealthBarScript healthBar;
 	// Use this for initialization
 	void Start (){
 		myRigidBody = GetComponent<Rigidbody2D> ();	
@@ -111,7 +112,7 @@ public class PlayerController : MonoBehaviour{
 			player.transform.position = tmpPosition;
 			player.SetActive(true);
             player.transform.position = savePointSystem.getSavePoint();
-
+            healthBar.takeDamage(10);
 		}
 		if (collision.gameObject.tag == "PlatformForDiving")
 		{

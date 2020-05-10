@@ -34,6 +34,7 @@ public class BearController : MonoBehaviour {
     private SavePointSystem savePointSystem;
     private ScoreScript scoreScript;
     private GridScript gridScript;
+    public HealthBarScript healthBar;
 
     private float currentFallTime;
     private float maxFallTime = 1.2f;
@@ -44,17 +45,15 @@ public class BearController : MonoBehaviour {
     private bool serekosEye = false;
     private bool staffOfFindol = false;
     private float timeLeft = 5;
-
-    public HealthBarScript healthBar;
     // Use this for initialization
     void Awake()
     {
         //		startTime = Time.time;
         anim = GetComponent<Animator>();
         fire.gameObject.SetActive(false);
-        this.scoreScript = new ScoreScript();
         this.gridScript = GameObject.Find("Grid").GetComponent<GridScript>();
         this.savePointSystem = GameObject.Find("SavePointSystem").GetComponent<SavePointSystem>();
+        this.scoreScript = GameObject.Find("ScoreScript").GetComponent<ScoreScript>();
         textAfter = GameObject.FindGameObjectWithTag("TextAfterArtifact").GetComponent<Text>();
         healthBar.resetHealthBar();
     }
@@ -67,6 +66,7 @@ public class BearController : MonoBehaviour {
 
     void Update()
     {
+        isColliding = false;
         moveXInput = Input.GetAxis("Horizontal");
 
         if ((grounded) && Input.GetKeyDown("up"))
@@ -106,7 +106,7 @@ public class BearController : MonoBehaviour {
             HSpeed = 10f;
         }
 
-        if (Input.GetKeyDown("x") && (grounded || staffOfFindol))
+        if (Input.GetKeyDown("x") && (grounded || staffOfFindol) && !activeFire)
         {
             SoundManager.PlaySound("fire");
             fire.gameObject.SetActive(true);
@@ -214,7 +214,7 @@ public class BearController : MonoBehaviour {
         }
         if(collision.gameObject.tag == "Artefact")
         {
-            
+            scoreScript.addPoints(250);
             Destroy(collision.gameObject);
             switch(collision.gameObject.name)
             {
