@@ -66,7 +66,6 @@ public class BearController : MonoBehaviour {
 
     void Update()
     {
-        isColliding = false;
         moveXInput = Input.GetAxis("Horizontal");
 
         if ((grounded) && Input.GetKeyDown("up"))
@@ -210,7 +209,6 @@ public class BearController : MonoBehaviour {
             SoundManager.PlaySound("diamond");
             Destroy(collision.gameObject);
             scoreScript.addPoints(100);
-            Debug.Log(scoreScript.getScore());
         }
         if(collision.gameObject.tag == "Artefact")
         {
