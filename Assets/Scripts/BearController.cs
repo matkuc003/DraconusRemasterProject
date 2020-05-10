@@ -176,6 +176,7 @@ public class BearController : MonoBehaviour {
         {
             PlayerDead();
         }
+
         if (collision.gameObject.tag == "PlatformForDiving")
         {
             platformCheck = true;
@@ -189,6 +190,10 @@ public class BearController : MonoBehaviour {
             Debug.Log("save point: " + this.gameObject.transform.position.x + ", " + this.gameObject.transform.position.y);
             savePointSystem.setSavePoint(this.gameObject.transform.position);
         }
+        if (collision.gameObject.tag == "Monster")
+        {
+            PlayerDead();
+        }
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -196,7 +201,8 @@ public class BearController : MonoBehaviour {
         {
             PlayerDead();
         }
-        if(collision.gameObject.tag == "ExtraPoint")
+
+        if (collision.gameObject.tag == "ExtraPoint")
         {
             SoundManager.PlaySound("diamond");
             Destroy(collision.gameObject);

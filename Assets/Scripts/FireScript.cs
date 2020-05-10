@@ -22,5 +22,6 @@ public class FireScript : MonoBehaviour
         {
             Destroy(collision.gameObject);
         }
+
     }
 }
