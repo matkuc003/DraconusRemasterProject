@@ -2,28 +2,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine.UI;
 
 //This Script is intended for demoing and testing animations only.
 public class BearController : MonoBehaviour {
 
-	private float HSpeed = 10f;
-	//private float maxVertHSpeed = 20f;
-	private bool facingRight = true;
-	private float moveXInput;
+    private float HSpeed = 10f;
+    //private float maxVertHSpeed = 20f;
+    private bool facingRight = true;
+    private float moveXInput;
     private Vector3 tmpPosition;
 
     //Used for flipping Character Direction
-	public static Vector3 theScale;
-
-	//Jumping Stuff
-	public Transform groundCheck;
-	public LayerMask whatIsGround;
-	private bool grounded = false;
+    public static Vector3 theScale;
+    private Text textAfter;
+    //Jumping Stuff
+    public Transform groundCheck;
+    public LayerMask whatIsGround;
+    private bool grounded = false;
     private bool crouch = false;
-	private float groundRadius = 0.15f;
-	private float jumpForce = 12f;
+    private float groundRadius = 0.15f;
+    private float jumpForce = 12f;
 
-	private Animator anim;
+    private Animator anim;
     public GameObject diver;
     private Boolean platformCheck;
     public Animator fire;
@@ -40,43 +41,47 @@ public class BearController : MonoBehaviour {
 
     private bool mysticalMorphHelix = false;
     private bool demonShieldOfGrom = false;
+    private bool serekosEye = false;
     private bool staffOfFindol = false;
+    private float timeLeft = 5;
     // Use this for initialization
-    void Awake ()
-	{
-//		startTime = Time.time;
-		anim = GetComponent<Animator> ();
+    void Awake()
+    {
+        //		startTime = Time.time;
+        anim = GetComponent<Animator>();
         fire.gameObject.SetActive(false);
         this.scoreScript = new ScoreScript();
         this.gridScript = GameObject.Find("Grid").GetComponent<GridScript>();
         this.savePointSystem = GameObject.Find("SavePointSystem").GetComponent<SavePointSystem>();
+        textAfter = GameObject.FindGameObjectWithTag("TextAfterArtifact").GetComponent<Text>();
     }
 
-	void FixedUpdate ()
-	{
-		grounded = Physics2D.OverlapCircle (groundCheck.position, groundRadius, whatIsGround);
-		anim.SetBool ("ground", grounded);
+    void FixedUpdate()
+    {
+        grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
+        anim.SetBool("ground", grounded);
     }
 
-	void Update()
-	{
+    void Update()
+    {
         moveXInput = Input.GetAxis("Horizontal");
 
         if ((grounded) && Input.GetKeyDown("up"))
         {
             anim.SetBool("ground", false);
+            SoundManager.PlaySound("jump");
 
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.y, jumpForce);
-        } 
-        
-        if((grounded) && Input.GetKey("down"))
+        }
+
+        if ((grounded) && Input.GetKey("down"))
         {
             Debug.Log("crouch");
             anim.SetBool("crouch", true);
             crouch = true;
         } else
         {
-           // anim.SetBool("crouch", false);
+            // anim.SetBool("crouch", false);
             crouch = false;
         }
 
@@ -85,7 +90,7 @@ public class BearController : MonoBehaviour {
 
         GetComponent<Rigidbody2D>().velocity = new Vector2((moveXInput * HSpeed), GetComponent<Rigidbody2D>().velocity.y);
 
-        if (Input.GetKeyDown("c") && (grounded)) { anim.SetTrigger("Punch"); }
+        if (Input.GetKeyDown("c") && (grounded)) { anim.SetTrigger("Punch"); SoundManager.PlaySound("punch"); }
 
         if (Input.GetKey("left shift"))
         {
@@ -98,8 +103,9 @@ public class BearController : MonoBehaviour {
             HSpeed = 10f;
         }
 
-        if(Input.GetKeyDown("x") && (grounded || staffOfFindol))
+        if (Input.GetKeyDown("x") && (grounded || staffOfFindol))
         {
+            SoundManager.PlaySound("fire");
             fire.gameObject.SetActive(true);
             timeFire = Time.time;
             activeFire = true;
@@ -109,7 +115,7 @@ public class BearController : MonoBehaviour {
         if (!(grounded) && !(demonShieldOfGrom)) playerIsFall = true;
         else playerIsFall = false;
 
-        if (playerIsFall) 
+        if (playerIsFall)
             currentFallTime += Time.deltaTime;
 
         if ((grounded) && currentFallTime < maxFallTime)
@@ -126,8 +132,9 @@ public class BearController : MonoBehaviour {
         else if (moveXInput < 0 && facingRight)
             Flip();
 
-        if(platformCheck==true && Input.GetKeyDown("v") && mysticalMorphHelix)
+        if (platformCheck == true && Input.GetKeyDown("v") && mysticalMorphHelix)
         {
+            SoundManager.PlaySound("transformation");
             anim.SetBool("vPressed", true);
             tmpPosition = this.gameObject.transform.position;
             tmpPosition.y -= 3;
@@ -135,6 +142,14 @@ public class BearController : MonoBehaviour {
             diver.transform.position = tmpPosition;
             diver.SetActive(true);
             platformCheck = false;
+        }
+        if (mysticalMorphHelix || serekosEye|| demonShieldOfGrom || staffOfFindol)
+        {
+            timeLeft -= Time.deltaTime;
+            if (timeLeft < 0)
+            {
+                textAfter.text = "";
+            }
         }
         anim.SetBool("vPressed", false);
     }
@@ -183,26 +198,43 @@ public class BearController : MonoBehaviour {
         }
         if(collision.gameObject.tag == "ExtraPoint")
         {
+            SoundManager.PlaySound("diamond");
             Destroy(collision.gameObject);
             scoreScript.addPoints(100);
             Debug.Log(scoreScript.getScore());
         }
         if(collision.gameObject.tag == "Artefact")
         {
+            
             Destroy(collision.gameObject);
             switch(collision.gameObject.name)
             {
                 case "Mystical Morph Helix":
+                    SoundManager.PlaySound("artifact");
+                    timeLeft = 5;
                     this.mysticalMorphHelix = true;
-                break;
+                
+                    textAfter.text= "Mystical Morph Helix - Mozesz teraz zamienic się w nurka na odpowiednich platformach po nacisnieciu v";
+
+                    break;
                 case "Serekos Eye":
+                    SoundManager.PlaySound("artifact");
+                    timeLeft = 5;
+                    this.serekosEye = true;
                     this.gridScript.setVisibleHiddenWall(true);
+                    textAfter.text = "Serekos Eye - Mozesz teraz przechodzic przez niewidzialne sciany";
                 break;
                 case "Demon Shield of Grom":
-                    this.demonShieldOfGrom = true;    
+                    SoundManager.PlaySound("artifact");
+                    timeLeft = 5;
+                    this.demonShieldOfGrom = true;
+                    textAfter.text = "Demon Shield of Grom - Przetrwasz teraz upadki z dowolnej odleglosci";
                 break;
                 case "Staff of Findol":
-                    this.staffOfFindol = true;    
+                    SoundManager.PlaySound("artifact");
+                    timeLeft = 5;
+                    this.staffOfFindol = true;
+                    textAfter.text = "Staff of Findol - Mozesz teraz ziac ogniem podczas skoku";
                 break;
             }
         }
@@ -210,6 +242,7 @@ public class BearController : MonoBehaviour {
 
     public void PlayerDead()
     {
+        SoundManager.PlaySound("dead");
         this.gameObject.transform.position = savePointSystem.getSavePoint();
     }
 }

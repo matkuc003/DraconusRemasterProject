@@ -13,6 +13,7 @@ public class SavePointSystem : MonoBehaviour
 
     public void setSavePoint(Vector2 position)
     {
+        SoundManager.PlaySound("savepoint");
         savePoint = position;
     }
 

@@ -13,6 +13,7 @@ TagManager:
   - SavePoint
   - ExtraPoint
   - Artefact
+  - TextAfterArtifact
   layers:
   - Default
   - TransparentFX

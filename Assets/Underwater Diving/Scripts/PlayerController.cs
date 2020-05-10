@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour{
 
 		if (platformCheck2 == true && Input.GetKeyDown("v"))
 		{
+			SoundManager.PlaySound("transformation");
 			myAnim.SetBool("vPressed", true);
 			tmpPosition = this.gameObject.transform.position;
 			tmpPosition.y += 3;
@@ -105,6 +106,7 @@ public class PlayerController : MonoBehaviour{
 	{
 		if (collision.gameObject.tag == "Enemy")
 		{
+			SoundManager.PlaySound("dead");
 			this.gameObject.SetActive(false);
 			player.transform.position = tmpPosition;
 			player.SetActive(true);
