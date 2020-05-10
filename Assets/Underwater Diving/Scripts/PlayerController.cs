@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour{
 	public GameObject player;
     private SavePointSystem savePointSystem;
     public HealthBarScript healthBar;
+
+    private bool isCollision;
 	// Use this for initialization
 	void Start (){
 		myRigidBody = GetComponent<Rigidbody2D> ();	
@@ -27,11 +29,10 @@ public class PlayerController : MonoBehaviour{
 	
 	// Update is called once per frame
 	void Update (){
+        isCollision = false;
 
 		resetBoostTime ();
 		controllerManager ();
-
-
 
 		myAnim.SetFloat ("Speed", Mathf.Abs(myRigidBody.velocity.x));
 
@@ -105,20 +106,26 @@ public class PlayerController : MonoBehaviour{
 	}
 	void OnCollisionEnter2D(Collision2D collision)
 	{
-		if (collision.gameObject.tag == "Enemy")
-		{
-			SoundManager.PlaySound("dead");
-			this.gameObject.SetActive(false);
-			player.transform.position = tmpPosition;
-			player.SetActive(true);
-            player.transform.position = savePointSystem.getSavePoint();
-            healthBar.takeDamage(10);
-		}
 		if (collision.gameObject.tag == "PlatformForDiving")
 		{
 			platformCheck2 = true;
-
 		}
 	}
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (isCollision) return;
+        isCollision = true;
+
+        if (collision.gameObject.tag == "Enemy")
+        {
+            SoundManager.PlaySound("dead");
+            this.gameObject.SetActive(false);
+            player.transform.position = tmpPosition;
+            player.SetActive(true);
+            player.transform.position = savePointSystem.getSavePoint();
+            healthBar.takeDamage(10);
+        }
+    }
 
 }

@@ -45,6 +45,8 @@ public class BearController : MonoBehaviour {
     private bool serekosEye = false;
     private bool staffOfFindol = false;
     private float timeLeft = 5;
+
+    private bool isCollision;
     // Use this for initialization
     void Awake()
     {
@@ -66,6 +68,7 @@ public class BearController : MonoBehaviour {
 
     void Update()
     {
+        isCollision = false;
         moveXInput = Input.GetAxis("Horizontal");
 
         if ((grounded) && Input.GetKeyDown("up"))
@@ -174,6 +177,9 @@ public class BearController : MonoBehaviour {
     }
     void OnCollisionEnter2D(Collision2D collision)
     {
+        if (isCollision) return;
+        isCollision = true;
+
         if (collision.gameObject.tag == "Enemy")
         {
             PlayerDead();
@@ -189,21 +195,22 @@ public class BearController : MonoBehaviour {
         }
         if(collision.gameObject.tag == "SavePoint")
         {
-            Debug.Log("save point: " + this.gameObject.transform.position.x + ", " + this.gameObject.transform.position.y);
             savePointSystem.setSavePoint(this.gameObject.transform.position);
-        }
-        if (collision.gameObject.tag == "Monster")
-        {
-            PlayerDead();
         }
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
+        if (isCollision) return;
+        isCollision = true;
+
+        if (collision.gameObject.tag == "Monster")
+        {
+            PlayerDead();
+        }
         if (collision.gameObject.tag == "water")
         {
             PlayerDead();
         }
-
         if (collision.gameObject.tag == "ExtraPoint")
         {
             SoundManager.PlaySound("diamond");
