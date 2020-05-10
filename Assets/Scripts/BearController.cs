@@ -44,6 +44,8 @@ public class BearController : MonoBehaviour {
     private bool serekosEye = false;
     private bool staffOfFindol = false;
     private float timeLeft = 5;
+
+    public HealthBarScript healthBar;
     // Use this for initialization
     void Awake()
     {
@@ -54,6 +56,7 @@ public class BearController : MonoBehaviour {
         this.gridScript = GameObject.Find("Grid").GetComponent<GridScript>();
         this.savePointSystem = GameObject.Find("SavePointSystem").GetComponent<SavePointSystem>();
         textAfter = GameObject.FindGameObjectWithTag("TextAfterArtifact").GetComponent<Text>();
+        healthBar.resetHealthBar();
     }
 
     void FixedUpdate()
@@ -250,5 +253,6 @@ public class BearController : MonoBehaviour {
     {
         SoundManager.PlaySound("dead");
         this.gameObject.transform.position = savePointSystem.getSavePoint();
+        healthBar.takeDamage(20);
     }
 }
