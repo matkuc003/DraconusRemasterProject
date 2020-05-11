@@ -20,8 +20,10 @@ public class PlayerController : MonoBehaviour{
     public HealthBarScript healthBar;
 
     private bool isCollision;
-	// Use this for initialization
-	void Start (){
+    private bool isFlicker;
+    private float flickerTimeout;
+    // Use this for initialization
+    void Start (){
 		myRigidBody = GetComponent<Rigidbody2D> ();	
 		myAnim = GetComponent<Animator> ();
         this.savePointSystem = GameObject.Find("SavePointSystem").GetComponent<SavePointSystem>();
@@ -47,7 +49,12 @@ public class PlayerController : MonoBehaviour{
 			player.SetActive(true);
 			platformCheck2 = false;
 		}
-	}
+
+        flickerTimeout -= Time.deltaTime;
+        GetComponent<Flicker>().animate = flickerTimeout > 0;
+        if (flickerTimeout <= 0)
+            isFlicker = false;
+    }
 
 	void controllerManager (){
 		if (Input.GetAxisRaw ("Horizontal") > 0f) {
@@ -114,18 +121,21 @@ public class PlayerController : MonoBehaviour{
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (isCollision) return;
+        if (isCollision || isFlicker) return;
         isCollision = true;
 
         if (collision.gameObject.tag == "Enemy")
         {
-            SoundManager.PlaySound("dead");
-            this.gameObject.SetActive(false);
-            player.transform.position = tmpPosition;
-            player.SetActive(true);
-            player.transform.position = savePointSystem.getSavePoint();
-            healthBar.takeDamage(10);
+            HitMonster();
         }
+    }
+
+    private void HitMonster()
+    {
+        SoundManager.PlaySound("dead");
+        flickerTimeout = 2;
+        isFlicker = true;
+        healthBar.takeDamage(10);
     }
 
 }

@@ -47,6 +47,8 @@ public class BearController : MonoBehaviour {
     private float timeLeft = 5;
 
     private bool isCollision;
+    private bool isFlicker;
+    private float flickerTimeout;
     // Use this for initialization
     void Awake()
     {
@@ -131,6 +133,12 @@ public class BearController : MonoBehaviour {
             currentFallTime = 0;
             PlayerDead();
         }
+
+        flickerTimeout -= Time.deltaTime;
+        GetComponent<Flicker>().animate = flickerTimeout > 0;
+        if (flickerTimeout <= 0)
+            isFlicker = false;
+
         //Flipping direction character is facing based on players Input
         if (moveXInput > 0 && !facingRight)
             Flip();
@@ -200,12 +208,12 @@ public class BearController : MonoBehaviour {
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (isCollision) return;
+        if (isCollision || isFlicker) return;
         isCollision = true;
 
         if (collision.gameObject.tag == "Monster")
         {
-            PlayerDead();
+            HitMonster();
         }
         if (collision.gameObject.tag == "water")
         {
@@ -221,32 +229,24 @@ public class BearController : MonoBehaviour {
         {
             scoreScript.addPoints(250);
             Destroy(collision.gameObject);
-            switch(collision.gameObject.name)
+            SoundManager.PlaySound("artifact");
+            timeLeft = 5;
+            switch (collision.gameObject.name)
             {
                 case "Mystical Morph Helix":
-                    SoundManager.PlaySound("artifact");
-                    timeLeft = 5;
                     this.mysticalMorphHelix = true;
-                
                     textAfter.text= "Mystical Morph Helix - Mozesz teraz zamienic się w nurka na odpowiednich platformach po nacisnieciu v";
-
-                    break;
+                break;
                 case "Serekos Eye":
-                    SoundManager.PlaySound("artifact");
-                    timeLeft = 5;
                     this.serekosEye = true;
                     this.gridScript.setVisibleHiddenWall(true);
                     textAfter.text = "Serekos Eye - Mozesz teraz przechodzic przez niewidzialne sciany";
                 break;
                 case "Demon Shield of Grom":
-                    SoundManager.PlaySound("artifact");
-                    timeLeft = 5;
                     this.demonShieldOfGrom = true;
                     textAfter.text = "Demon Shield of Grom - Przetrwasz teraz upadki z dowolnej odleglosci";
                 break;
                 case "Staff of Findol":
-                    SoundManager.PlaySound("artifact");
-                    timeLeft = 5;
                     this.staffOfFindol = true;
                     textAfter.text = "Staff of Findol - Mozesz teraz ziac ogniem podczas skoku";
                 break;
@@ -259,5 +259,13 @@ public class BearController : MonoBehaviour {
         SoundManager.PlaySound("dead");
         this.gameObject.transform.position = savePointSystem.getSavePoint();
         healthBar.takeDamage(20);
+    }
+
+    private void HitMonster()
+    {
+        SoundManager.PlaySound("dead");
+        flickerTimeout = 2;
+        isFlicker = true;
+        healthBar.takeDamage(10);
     }
 }
