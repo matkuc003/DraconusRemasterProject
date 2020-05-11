@@ -211,7 +211,7 @@ public class BearController : MonoBehaviour {
         if (isCollision || isFlicker) return;
         isCollision = true;
 
-        if (collision.gameObject.tag == "Monster")
+        if (collision.gameObject.tag == "Monster" && !activeFire)
         {
             HitMonster();
         }

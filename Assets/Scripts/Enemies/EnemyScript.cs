@@ -10,9 +10,11 @@ public class EnemyScript : MonoBehaviour
     public float timeTrigger;
 
     private Rigidbody2D myRigidbody;
+    private ScoreScript scoreScript;
     // Start is called before the first frame update
     void Start()
     {
+        scoreScript = GameObject.Find("ScoreScript").GetComponent<ScoreScript>();
         myRigidbody = GetComponent<Rigidbody2D>();
         transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         turnTimer = 0;
@@ -47,6 +49,7 @@ public class EnemyScript : MonoBehaviour
         if (other.tag == "Fire")
         {
             Destroy(gameObject);
+            scoreScript.addPoints(Random.Range(1, 10));
         }
     }
 }
