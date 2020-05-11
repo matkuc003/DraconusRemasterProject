@@ -53,6 +53,7 @@ public class BearController : MonoBehaviour {
     void Awake()
     {
         //		startTime = Time.time;
+        GameObject.FindGameObjectWithTag("BossBar").GetComponent<BossBarHealth>().resetHealthBar();
         anim = GetComponent<Animator>();
         fire.gameObject.SetActive(false);
         this.gridScript = GameObject.Find("Grid").GetComponent<GridScript>();
@@ -215,6 +216,10 @@ public class BearController : MonoBehaviour {
         {
             HitMonster();
         }
+/*        if (collision.gameObject.tag == "Boss")
+        {
+            HitMonster();
+        }*/
         if (collision.gameObject.tag == "water")
         {
             PlayerDead();
