@@ -23,11 +23,9 @@ public class BombScript : MonoBehaviour
         if (timeRest2 > 0)
         {
             timeRest2 -= Time.deltaTime;
-            Debug.Log(timeRest2);
         }
         else
         {
-            Debug.Log("else");
             Vector2 actualPosition = gameObject.transform.position;
             if (direction)
                 actualPosition.y += 0.1f;
@@ -36,7 +34,6 @@ public class BombScript : MonoBehaviour
 
             this.gameObject.transform.position = actualPosition;
 
-            Debug.Log(startPosition.y + maxDistance + ", " + actualPosition.y);
             if (startPosition.y >= actualPosition.y || startPosition.y + maxDistance <= actualPosition.y)
             {
                 direction = !direction;

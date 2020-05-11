@@ -25,9 +25,7 @@ public class CameraController : MonoBehaviour
         rightBound = vertBound/2;
         leftBound = -vertBound/2;
         topBound = horBound/2 + cameraPos.y;
-        Debug.Log(topBound);
         bottomBound = -horBound/2 + cameraPos.y;
-        Debug.Log(bottomBound);
         player = GameObject.FindWithTag("Player").transform;
         tmpPlayer = GameObject.FindWithTag("Player").transform;
     }
