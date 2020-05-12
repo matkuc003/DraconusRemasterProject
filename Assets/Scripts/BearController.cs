@@ -46,6 +46,10 @@ public class BearController : MonoBehaviour {
     private bool staffOfFindol = false;
     private float timeLeft = 5;
 
+    public Transform attackPoint;
+    public float attackRange = 1f;
+    public LayerMask attackMask;
+
     private bool isCollision;
     private bool isFlicker;
     private float flickerTimeout;
@@ -98,7 +102,19 @@ public class BearController : MonoBehaviour {
 
         GetComponent<Rigidbody2D>().velocity = new Vector2((moveXInput * HSpeed), GetComponent<Rigidbody2D>().velocity.y);
 
-        if (Input.GetKeyDown("c") && (grounded)) { anim.SetTrigger("Punch"); SoundManager.PlaySound("punch"); }
+        if (Input.GetKeyDown("c") && (grounded)) { 
+            anim.SetTrigger("Punch"); 
+            SoundManager.PlaySound("punch");
+            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, attackMask);
+
+            foreach (Collider2D enemy in hitEnemies)
+            {
+                SoundManager.PlaySound("dead");
+                Destroy(enemy.gameObject);
+
+            }
+
+        }
 
         if (Input.GetKey("left shift"))
         {
@@ -272,5 +288,12 @@ public class BearController : MonoBehaviour {
         flickerTimeout = 2;
         isFlicker = true;
         healthBar.takeDamage(10);
+    }
+    void OnDrawGizmosSelected()
+    {
+        if (attackPoint == null)
+            return;
+
+        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
 }

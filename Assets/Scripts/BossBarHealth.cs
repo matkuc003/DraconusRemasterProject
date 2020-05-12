@@ -24,15 +24,15 @@ public class BossBarHealth : MonoBehaviour
     {
         if (isInvulnerable)
             return;
+        if (this.currentHealth <= 200)
+        {
+            Debug.Log("RAGE");
+            GameObject.FindGameObjectWithTag("Boss").GetComponent<Animator>().SetBool("IsEnrage", true);
+        }
         GameObject.FindGameObjectWithTag("Boss").GetComponent<Animator>().SetTrigger("IsHitted");
         this.currentHealth -= damage;
         slider.value = this.currentHealth;
         fill.color = gradient.Evaluate(slider.normalizedValue);
-        if (this.currentHealth  <= 200)
-        {
-            Debug.Log("RAGE");
-            GameObject.FindGameObjectWithTag("Boss").GetComponent<Animator>().SetBool("IsEnraged", true);
-        }
         if (checkBossDied())
              die();
     }
