@@ -53,6 +53,9 @@ public class BearController : MonoBehaviour {
     private bool isCollision;
     private bool isFlicker;
     private float flickerTimeout;
+
+    public float attackRate = 1f;
+    float nextAttackTime = 0f;
     // Use this for initialization
     void Awake()
     {
@@ -101,19 +104,22 @@ public class BearController : MonoBehaviour {
         anim.SetFloat("vSpeed", GetComponent<Rigidbody2D>().velocity.y);
 
         GetComponent<Rigidbody2D>().velocity = new Vector2((moveXInput * HSpeed), GetComponent<Rigidbody2D>().velocity.y);
-
-        if (Input.GetKeyDown("c") && (grounded)) { 
-            anim.SetTrigger("Punch"); 
-            SoundManager.PlaySound("punch");
-            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, attackMask);
-
-            foreach (Collider2D enemy in hitEnemies)
+        if (Time.time >= nextAttackTime)
+        {
+            if (Input.GetKeyDown("c") && (grounded))
             {
-                SoundManager.PlaySound("dead");
-                Destroy(enemy.gameObject);
+                anim.SetTrigger("Punch");
+                SoundManager.PlaySound("punch");
+                Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, attackMask);
 
+                foreach (Collider2D enemy in hitEnemies)
+                {
+                    SoundManager.PlaySound("dead");
+                    Destroy(enemy.gameObject);
+
+                }
+                nextAttackTime = Time.time + 1f / attackRate;
             }
-
         }
 
         if (Input.GetKey("left shift"))
@@ -126,16 +132,18 @@ public class BearController : MonoBehaviour {
             anim.SetBool("Sprint", false);
             HSpeed = 10f;
         }
-
-        if (Input.GetKeyDown("x") && (grounded || staffOfFindol) && !activeFire)
+        if (Time.time >= nextAttackTime)
         {
-            SoundManager.PlaySound("fire");
-            fire.gameObject.SetActive(true);
-            timeFire = Time.time;
-            activeFire = true;
+            if (Input.GetKeyDown("x") && (grounded || staffOfFindol) && !activeFire)
+            {
+                SoundManager.PlaySound("fire");
+                fire.gameObject.SetActive(true);
+                timeFire = Time.time;
+                activeFire = true;
+                nextAttackTime = Time.time + 1f / attackRate;
+            }
+            disableFire();
         }
-        disableFire();
-
         if (!(grounded) && !(demonShieldOfGrom)) playerIsFall = true;
         else playerIsFall = false;
 
