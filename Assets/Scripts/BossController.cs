@@ -8,11 +8,13 @@ public class BossController : MonoBehaviour
     public bool isFlipped = false;
 
     public Vector3 attackOffset;
-    public float attackRange = 1f;
-    public LayerMask attackMask;
     public int attackDamage = 20;
     public int enrageAttackDamage = 40;
-    private bool triggered = false;
+
+    public Transform attackPoint;
+    public float attackRange = 1f;
+    public LayerMask attackMask;
+
     public void LookAtPlayer()
     {
         Vector3 flipped = transform.localScale;
@@ -33,38 +35,26 @@ public class BossController : MonoBehaviour
     }
     public void Attack()
     {
-        /*        Debug.Log("attack1");
-                Vector3 pos = transform.position;
-                pos += transform.right * attackOffset.x;
-                pos += transform.up * attackOffset.y;
 
-                Collider2D colInfo = Physics2D.OverlapCircle(pos, attackRange, attackMask);
-                if (colInfo != null)
-                {
-                    Debug.Log("TATASRASRSAASRARSASRA");*/
-        // }
-
-
-        //TODO ATTACK BY BOSS
-        if (triggered)
+        Collider2D[] hitPlayers = Physics2D.OverlapCircleAll(attackPoint.position,attackRange,attackMask);
+        
+        foreach(Collider2D player in hitPlayers)
         {
             GameObject.FindGameObjectWithTag("HealthBar").GetComponent<HealthBarScript>().takeDamage(attackDamage);
-            triggered = false;
+            break;
         }
+
     }
+
     public void EnragedAttack()
     {
-        //TODO ATTACK BY RAGED BOSS
-        Debug.Log("enragedAttack");
-        Vector3 pos = transform.position;
-        pos += transform.right * attackOffset.x;
-        pos += transform.up * attackOffset.y;
 
-        Collider2D colInfo = Physics2D.OverlapCircle(pos, attackRange, attackMask);
-        if (colInfo != null)
+        Collider2D[] hitPlayers = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, attackMask);
+
+        foreach (Collider2D player in hitPlayers)
         {
-            Debug.Log("BUUUM");
-            colInfo.GetComponent<HealthBarScript>().takeDamage(attackDamage);
+            GameObject.FindGameObjectWithTag("HealthBar").GetComponent<HealthBarScript>().takeDamage(enrageAttackDamage);
+            break;
         }
     }
     void OnTriggerEnter2D(Collider2D other)
@@ -75,11 +65,11 @@ public class BossController : MonoBehaviour
    
         }
     }
-    private void OnCollisionEnter2D(Collision2D collision)
+    void OnDrawGizmosSelected()
     {
-        if (collision.gameObject.tag == "Player")
-        {
-            triggered = true;
-        }
+        if (attackPoint == null)
+            return;
+
+        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
 }
