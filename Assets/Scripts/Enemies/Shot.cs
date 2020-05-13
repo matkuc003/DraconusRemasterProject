@@ -19,7 +19,7 @@ public class Shot : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Base" || other.tag == "Player")
+        if (other.tag == "Base" || other.tag == "Player" || other.tag == "water")
         {
             Destroy(gameObject);
         }

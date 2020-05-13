@@ -11,8 +11,6 @@ public class GunScript : MonoBehaviour
     private Quaternion rotation;
     void Start()
     {
-        position = gameObject.transform.position;
-        position.y -= 1.5f;
         rotation = new Quaternion(0, 0, 0, 0);
     }
 
@@ -21,6 +19,8 @@ public class GunScript : MonoBehaviour
     {
         if (time <= 0) {
             time = frequency;
+            position = gameObject.transform.position;
+            position.y -= 1f;
             Instantiate(ammo, position, rotation);
         }
         else
