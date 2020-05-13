@@ -254,7 +254,14 @@ public class BearController : MonoBehaviour {
             Destroy(collision.gameObject);
             scoreScript.addPoints(100);
         }
-        if(collision.gameObject.tag == "Artefact")
+        if(collision.gameObject.tag == "Potion")
+        {
+            SoundManager.PlaySound("diamond");
+            Destroy(collision.gameObject);
+            scoreScript.addPoints(50);
+            healthBar.addHealth(20);
+        }
+        if (collision.gameObject.tag == "Artefact")
         {
             scoreScript.addPoints(250);
             Destroy(collision.gameObject);

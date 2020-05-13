@@ -51,7 +51,6 @@ public class BombJingle : MonoBehaviour
         float x = Random.Range(startPosition.x - rangeX, startPosition.x + rangeX);
         float y = Random.Range(startPosition.y - rangeY, startPosition.y + rangeY);
         target = new Vector2(x, y);
-        Debug.Log("target: " + target);
     }
 
     private float AnimationLength(string name)

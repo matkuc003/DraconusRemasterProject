@@ -29,6 +29,13 @@ public class HealthBarScript : MonoBehaviour
             showGameOverScene();
     }
 
+    public void addHealth(int health)
+    {
+        this.currentHealth += health;
+        slider.value = this.currentHealth;
+        fill.color = gradient.Evaluate(slider.normalizedValue);
+    }
+
     private bool checkPlayerDied()
     {
         return this.currentHealth <= 0;
