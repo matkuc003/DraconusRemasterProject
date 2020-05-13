@@ -294,7 +294,7 @@ public class BearController : MonoBehaviour {
     {
         SoundManager.PlaySound("dead");
         this.gameObject.transform.position = savePointSystem.getSavePoint();
-        healthBar.takeDamage(20);
+        healthBar.takeDamage(UnityEngine.Random.Range(2, 4) * 5);
     }
 
     private void HitMonster()
@@ -302,7 +302,7 @@ public class BearController : MonoBehaviour {
         SoundManager.PlaySound("dead");
         flickerTimeout = 2;
         isFlicker = true;
-        healthBar.takeDamage(10);
+        healthBar.takeDamage(UnityEngine.Random.Range(1,3)*5);
     }
     void OnDrawGizmosSelected()
     {
