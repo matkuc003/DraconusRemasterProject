@@ -13,6 +13,11 @@ public class ScoreScript : MonoBehaviour
         textScore.text = "Score: 0";
     }
 
+    public static void resetStaticScore()
+    {
+        score = 0;
+    }
+
     public void addPoints(int points)
     {
         score += points;

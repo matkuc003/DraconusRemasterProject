@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour{
 	public GameObject player;
     private SavePointSystem savePointSystem;
     public HealthBarScript healthBar;
+    private ScoreScript scoreScript;
 
     private bool isCollision;
     private bool isFlicker;
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour{
 		myRigidBody = GetComponent<Rigidbody2D> ();	
 		myAnim = GetComponent<Animator> ();
         this.savePointSystem = GameObject.Find("SavePointSystem").GetComponent<SavePointSystem>();
+        this.scoreScript = GameObject.Find("ScoreScript").GetComponent<ScoreScript>();
     }
 	
 	// Update is called once per frame
@@ -110,7 +112,13 @@ public class PlayerController : MonoBehaviour{
 			tmpPosition2.y -= 1;
 			this.gameObject.transform.position = tmpPosition2;
 		}
-	}
+        if (collision.gameObject.tag == "ExtraPoint")
+        {
+            SoundManager.PlaySound("diamond");
+            Destroy(collision.gameObject);
+            scoreScript.addPoints(100);
+        }
+    }
 	void OnCollisionEnter2D(Collision2D collision)
 	{
 		if (collision.gameObject.tag == "PlatformForDiving")

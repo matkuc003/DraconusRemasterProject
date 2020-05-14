@@ -10,5 +10,6 @@ public class ShowScoreScript : MonoBehaviour
     {
         scoreText = GameObject.Find("Score").GetComponent<Text>();
         scoreText.text = "Score: " + ScoreScript.getScore();
+        ScoreScript.resetStaticScore();
     }
 }
