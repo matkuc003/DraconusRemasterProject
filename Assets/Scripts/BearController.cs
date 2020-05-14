@@ -23,7 +23,12 @@ public class BearController : MonoBehaviour {
     private bool crouch = false;
     private float groundRadius = 0.15f;
     private float jumpForce = 12f;
-
+    private bool toLeftB = false;
+    private bool toRightB = false;
+    private bool toJumpB = false;
+    private bool toFireB = false;
+    private bool toPunchB = false;
+    private static bool toTranformationB = false;
     private Animator anim;
     public GameObject diver;
     private Boolean platformCheck;
@@ -81,7 +86,7 @@ public class BearController : MonoBehaviour {
         isCollision = false;
         moveXInput = Input.GetAxis("Horizontal");
 
-        if ((grounded) && Input.GetKeyDown("up"))
+        if ((grounded) && (Input.GetKeyDown("up")||toJumpB))
         {
             anim.SetBool("ground", false);
             SoundManager.PlaySound("jump");
@@ -99,14 +104,22 @@ public class BearController : MonoBehaviour {
             // anim.SetBool("crouch", false);
             crouch = false;
         }
-
+        if (toRightB)
+        {
+            moveXInput = 1;
+        }
+        else if (toLeftB)
+        {
+            moveXInput = -1;
+        }
         anim.SetFloat("HSpeed", Mathf.Abs(moveXInput));
         anim.SetFloat("vSpeed", GetComponent<Rigidbody2D>().velocity.y);
 
         GetComponent<Rigidbody2D>().velocity = new Vector2((moveXInput * HSpeed), GetComponent<Rigidbody2D>().velocity.y);
+
         if (Time.time >= nextAttackTime)
         {
-            if (Input.GetKeyDown("c") && (grounded))
+            if ((Input.GetKeyDown("c")||toPunchB) && (grounded))
             {
                 anim.SetTrigger("Punch");
                 SoundManager.PlaySound("punch");
@@ -134,7 +147,7 @@ public class BearController : MonoBehaviour {
         }
         if (Time.time >= nextAttackTime)
         {
-            if (Input.GetKeyDown("x") && (grounded || staffOfFindol) && !activeFire)
+            if ((Input.GetKeyDown("x")||toFireB) && (grounded || staffOfFindol) && !activeFire)
             {
                 SoundManager.PlaySound("fire");
                 fire.gameObject.SetActive(true);
@@ -170,7 +183,7 @@ public class BearController : MonoBehaviour {
         else if (moveXInput < 0 && facingRight)
             Flip();
 
-        if (platformCheck == true && Input.GetKeyDown("v") && mysticalMorphHelix)
+        if (platformCheck == true && (Input.GetKeyDown("v")||toTranformationB) && mysticalMorphHelix)
         {
             SoundManager.PlaySound("transformation");
             anim.SetBool("vPressed", true);
@@ -310,5 +323,62 @@ public class BearController : MonoBehaviour {
             return;
 
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+    }
+    
+    public void goRightButton()
+    {
+        toRightB = true;
+    }
+    public void stopGoingRightButton()
+    {
+        toRightB = false;
+    }
+    public void goLeftButton()
+    {
+        toLeftB = true;
+    }
+    public void stopGoingLeftButton()
+    {
+        toLeftB = false;
+    }
+    public void startJumpButton()
+    {
+        toJumpB = true;
+    }
+    public void stopJumpButton()
+    {
+        toJumpB = false;
+    }
+    public void startFireButton()
+    {
+        toFireB = true;
+    }
+    public void stopFireButton()
+    {
+        toFireB = false;
+    }
+    public void startPunchButton()
+    {
+        toPunchB = true;
+    }
+    public void stopPunchButton()
+    {
+        toPunchB = false;
+    }
+    public void startTransformationButton()
+    {
+        toTranformationB = true;
+    }
+    public void stopTransformationButton()
+    {
+        toTranformationB = false;
+    }
+    public static bool getTransfortmationVar()
+    {
+        return toTranformationB;
+    }
+    public void clickExitButton()
+    {
+        Application.LoadLevel("Menu");
     }
 }

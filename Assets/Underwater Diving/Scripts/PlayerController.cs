@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour{
 
 		myAnim.SetFloat ("Speed", Mathf.Abs(myRigidBody.velocity.x));
 
-		if (platformCheck2 == true && Input.GetKeyDown("v"))
+		if (platformCheck2 == true && (Input.GetKeyDown("v")||BearController.getTransfortmationVar()))
 		{
 			SoundManager.PlaySound("transformation");
 			myAnim.SetBool("vPressed", true);
