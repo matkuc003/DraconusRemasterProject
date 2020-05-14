@@ -16,7 +16,6 @@ public class EnemyScript : MonoBehaviour
     {
         scoreScript = GameObject.Find("ScoreScript").GetComponent<ScoreScript>();
         myRigidbody = GetComponent<Rigidbody2D>();
-        transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         turnTimer = 0;
         timeTrigger = 5f;
     }
@@ -37,11 +36,11 @@ public class EnemyScript : MonoBehaviour
     {
         if (transform.localScale.x == 0.5f)
         {
-            transform.localScale = new Vector3(-0.5f, 0.5f, 0.5f);
+            transform.localScale = new Vector3(-1f, 1f, 1f);
         }
         else
         {
-            transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            transform.localScale = new Vector3(1f, 1f, 1f);
         }
     }
     void OnTriggerEnter2D(Collider2D other)
