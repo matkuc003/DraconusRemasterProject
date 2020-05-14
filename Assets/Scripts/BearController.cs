@@ -23,8 +23,8 @@ public class BearController : MonoBehaviour {
     private bool crouch = false;
     private float groundRadius = 0.15f;
     private float jumpForce = 12f;
-    private bool toLeftB = false;
-    private bool toRightB = false;
+    private static bool toLeftB = false;
+    private static bool toRightB = false;
     private bool toJumpB = false;
     private bool toFireB = false;
     private bool toPunchB = false;
@@ -376,6 +376,14 @@ public class BearController : MonoBehaviour {
     public static bool getTransfortmationVar()
     {
         return toTranformationB;
+    }
+    public static bool getLeftButton()
+    {
+        return toLeftB;
+    }
+    public static bool getRightButton()
+    {
+        return toRightB;
     }
     public void clickExitButton()
     {

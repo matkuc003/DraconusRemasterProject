@@ -10,7 +10,8 @@ public class PlayerController : MonoBehaviour{
 	private Vector3 tmpPosition,tmpPosition2;
 	float timeLeft = 2f;
 	private bool platformCheck2;
-
+	private bool goUpB = false;
+	private bool goDownB = false;
 	private Rigidbody2D myRigidBody;
 
 	private Animator myAnim;
@@ -59,15 +60,15 @@ public class PlayerController : MonoBehaviour{
     }
 
 	void controllerManager (){
-		if (Input.GetAxisRaw ("Horizontal") > 0f) {
+		if (Input.GetAxisRaw ("Horizontal") > 0f || BearController.getRightButton()) {
 			transform.localScale = new Vector3(3f, 3f, 3f);
 			movePlayer ();
-		} else if (Input.GetAxisRaw ("Horizontal") < 0f) {			
+		} else if (Input.GetAxisRaw ("Horizontal") < 0f || BearController.getLeftButton()) {			
 			transform.localScale = new Vector3(-3f, 3f, 3f);
 			movePlayer ();
-		} else if (Input.GetAxisRaw ("Vertical") > 0f) {
+		} else if (Input.GetAxisRaw ("Vertical") > 0f || goUpB) {
 			myRigidBody.velocity = new Vector3 (myRigidBody.velocity.x, moveSpeed, 0f);
-		} else if (Input.GetAxis ("Vertical") < 0f) {
+		} else if (Input.GetAxis ("Vertical") < 0f||goDownB) {
 			myRigidBody.velocity = new Vector3 (myRigidBody.velocity.x, -moveSpeed, 0f);
 		}
 
@@ -145,5 +146,23 @@ public class PlayerController : MonoBehaviour{
         isFlicker = true;
         healthBar.takeDamage(10);
     }
+
+	public void startUpButton()
+	{
+		goUpB = true;
+	}
+	public void stopUpButton()
+	{
+		goUpB = false;
+	}
+	public void startDownButton()
+	{
+		goDownB = true;
+
+	}
+	public void stopDownButton()
+	{
+		goDownB = false;
+	}
 
 }
