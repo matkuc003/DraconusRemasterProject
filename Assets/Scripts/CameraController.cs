@@ -15,13 +15,29 @@ public class CameraController : MonoBehaviour
     private float topBound;
     private float bottomBound;
 
+    private float camSize = 5.3f;
+    private float camAspect = 2.263291f;
+
     // Start is called before the first frame update
     void Start()
     {
+        if (Camera.main.orthographicSize != camSize)
+        {
+            Camera.main.orthographicSize = camSize;
+        }
+        if (Camera.main.aspect != camAspect)
+        {
+            Camera.main.aspect = camAspect;
+        }
+
         cameraPos = transform.position;
         Camera cam = Camera.main;
+        
         horBound = 2f * cam.orthographicSize;
+        Debug.Log(cam.orthographicSize);
         vertBound = horBound * cam.aspect;
+        Debug.Log(cam.aspect);
+
         rightBound = vertBound/2;
         leftBound = -vertBound/2;
         topBound = horBound/2 + cameraPos.y;
