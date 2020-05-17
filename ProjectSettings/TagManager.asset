@@ -19,6 +19,9 @@ TagManager:
   - BossBar
   - HealthBar
   - Potion
+  - TransButton
+  - UpButton
+  - DownButton
   layers:
   - Default
   - TransparentFX

@@ -31,6 +31,10 @@ public class BearController : MonoBehaviour {
     private static bool toTranformationB = false;
     private Animator anim;
     public GameObject diver;
+    public GameObject upButton;
+    public GameObject downButton;
+
+
     private Boolean platformCheck;
     public Animator fire;
     private float timeFire;
@@ -185,6 +189,8 @@ public class BearController : MonoBehaviour {
 
         if (platformCheck == true && (Input.GetKeyDown("v")||toTranformationB) && mysticalMorphHelix)
         {
+            this.upButton.SetActive(true);
+            this.downButton.SetActive(true);
             SoundManager.PlaySound("transformation");
             anim.SetBool("vPressed", true);
             tmpPosition = this.gameObject.transform.position;

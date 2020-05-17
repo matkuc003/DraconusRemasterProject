@@ -21,11 +21,15 @@ public class PlayerController : MonoBehaviour{
     public HealthBarScript healthBar;
     private ScoreScript scoreScript;
 
-    private bool isCollision;
+	public GameObject upButton;
+	public GameObject downButton;
+
+	private bool isCollision;
     private bool isFlicker;
     private float flickerTimeout;
-    // Use this for initialization
-    void Start (){
+
+	// Use this for initialization
+	void Start (){
 		myRigidBody = GetComponent<Rigidbody2D> ();	
 		myAnim = GetComponent<Animator> ();
         this.savePointSystem = GameObject.Find("SavePointSystem").GetComponent<SavePointSystem>();
@@ -43,6 +47,8 @@ public class PlayerController : MonoBehaviour{
 
 		if (platformCheck2 == true && (Input.GetKeyDown("v")||BearController.getTransfortmationVar()))
 		{
+			this.upButton.SetActive(false);
+			this.downButton.SetActive(false);
 			SoundManager.PlaySound("transformation");
 			myAnim.SetBool("vPressed", true);
 			tmpPosition = this.gameObject.transform.position;
@@ -81,6 +87,7 @@ public class PlayerController : MonoBehaviour{
 	}
 
 	void movePlayer(){
+		
 		platformCheck2 = false;
 		if (transform.localScale.x == 3f) {
 			myRigidBody.velocity = new Vector3 (moveSpeed + speedMod, myRigidBody.velocity.y, 0f);	
